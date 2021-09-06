@@ -1,0 +1,215 @@
+#cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#match_exists {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: calc(75px + 4vw);
+  color: var(--purple);
+  animation-name: match;
+  animation-duration: 3s;
+  animation-timing-function: ease-out;
+}
+@keyframes match {
+  0% {transform: translateY(300%);}
+  30% {transform: translateY(100%);}
+  100% {transform: translateY(150%)}
+}
+#card_empty1 {
+  position: absolute;
+  bottom: 50vh;
+  color: var(--section-background);
+  font-weight: 700;
+  font-size: 24px;
+  text-align: center;
+}
+#card_empty1::selection {
+  background-color: var(--purple);
+}
+
+#cards_content {
+  width: 30vw;
+  height: 80vh;
+  max-height: 600px;
+  min-height: 500px;
+  max-width: 400px;
+  background-color: var(--section-background);
+  border-radius: 30px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  margin-top: auto;
+  top: 20px;
+}
+
+.card_header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "header1 header2";
+  height: 40%;
+  width: 100%;
+  border-radius: 30px 30px 0 0;
+}
+.Unranked {background-color: #EDD5E6}
+.IRON {background-color: #897F7D}
+.BRONZE {background-color: #9A6F5E}
+.SILVER {background-color: #B7CACD}
+.GOLD {background-color: #E8D090}
+.PLATINUM {background-color: #8AB0AF}
+.DIAMOND {background-color: #7D94D1}
+.MASTER {background-color: #B592D8}
+.GRANDMASTER {background-color: #DA4271}
+.CHALLENGER {background-color: #FBD17D}
+
+#unranked_card_image {
+  border-radius: 50%;
+  height: calc(90px + 2.5vw);
+  position: absolute;
+  border: 3px solid var(--section-background);
+}
+
+.profile_summoner_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 20%;
+  left: 25%;
+  grid-area: header1;
+}
+
+#card_image {
+  border-radius: 50%;
+  height: calc(50px + 3vw);
+  position: absolute;
+  border: 3px solid var(--section-background);
+}
+.profile_tier_image {
+  height: calc(125px + 3vw);
+  position: absolute;
+}
+
+.card_header_text {
+  grid-area: header2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+}
+#card_username {
+  font-size: calc(20px + .5vw);
+  width: calc(100px + 5vw);
+  height: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#card_name {
+  font-size: calc(12px + .5vw);
+  line-height: 15px;
+  color: var(--section-background);
+  text-align: left;
+}
+.card_position {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card_position_image {
+  height: 50px;
+}
+
+.card_body {
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card_champions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30%;
+}
+.card_champions img {
+  height: 50px;
+  margin: 10px;
+  border-radius: 50%;
+}
+
+#card_bio {
+  width: 80%;
+  height: auto;
+  padding: 20px;
+  margin: 0 20px;
+  background-color: rgba(0,0,0,.1);
+  border-radius: 20px;
+  text-align: center;
+  word-wrap: break-word;
+}
+.card_buttons {
+  position: relative;
+}
+.card_button {
+  width: calc(40px + 2vw);
+  height: calc(40px + 2vw);
+  border-radius: 50%;
+  margin: 10px 50px;
+  transition: filter .2s;
+}
+.card_button:hover {
+  filter: brightness(80%);
+
+}
+.card_button_icon {
+  height: calc(20px + 1.5vw);
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  #cards_content {
+    width: 40vw;
+    margin-top: auto;
+    top: 0;
+    margin-bottom: auto;
+    bottom: 0;
+  }
+}
+@media screen and (max-width: 540px) {
+  #cards_content {
+    width: 80vw;
+    min-height: auto;
+  }
+  #card_bio {
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 280px) {
+  #unranked_card_image {
+    height: 100px;
+  }
+  .card_header_text {
+    transform: scale(.8);
+    margin-right: -20px;
+  }
+  .card_champions img {
+    height: 35px;
+  }
+  #card_bio {
+    padding: 10px;
+    margin: 10px;
+  }
+  .card_button {
+    margin: 10px 0;
+  }
+}
