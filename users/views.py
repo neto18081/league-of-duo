@@ -39,24 +39,25 @@ def register(request):
     email_exists = User.objects.filter(email=summoner_email).exists()
 
     if username_lol_exists:
-      return render(request, 'register.html', {'form': form, 'error': 'Usuário do lol já cadastrado!'})
+      return render(request, 'register.html', {'form': form, 'error': 'Usuário do lol já cadastrado!' ,'type': 'id_username_lol'})
     elif username_exists:
-      return render(request, 'register.html', {'form': form, 'error': 'Usuário já cadastrado!'})
+      return render(request, 'register.html', {'form': form, 'error': 'Usuário já cadastrado!', 'type': 'id_username'})
     elif email_exists:
-      return render(request, 'register.html', {'form': form, 'error': 'Email já cadastrado!'})
+      return render(request, 'register.html', {'form': form, 'error': 'Email já cadastrado!','type': 'id_email'})
     elif summoner_password1 != summoner_password2:
-      return render(request, 'register.html', {'form': form, 'error': 'As senhas devem ser iguais!'})
+      return render(request, 'register.html', {'form': form, 'error': 'As senhas devem ser iguais!','type': 'id_password1'})
     elif len(summoner_password1) < 8:
-      return render(request, 'register.html', {'form': form, 'error': 'A senha deve ter pelo menos 8 caracteres.'})
+      return render(request, 'register.html', {'form': form, 'error': 'A senha deve ter pelo menos 8 caracteres.','type': 'id_password1'})
+    elif summoner_password1.isdecimal():
+      return render(request, 'register.html', {'form': form, 'error': 'A senha deve conter letras!','type': 'id_password1'})
     else:
       # Verifica se o usuário existe no LOL
       try:
         account_info = watcher.summoner.by_name(region=region, summoner_name=summoner_username_lol)
         print('Usuário existente')
       except:
-        return render(request, 'register.html', {'form': form, 'error': 'Usuário inválido!'})
+        return render(request, 'register.html', {'form': form, 'error': 'Usuário inválido!', 'type': 'id_username_lol'})
       else:
-        print(request)
         if form.is_valid():
           new_user = form.save()
           user = User.objects.filter(username_lol__iexact=summoner_username_lol).update(puuid=account_info['puuid'])
@@ -468,7 +469,7 @@ def cards(request):
         champion_mastery = watcher.champion_mastery.by_summoner(region=region,encrypted_summoner_id=account_info['id'])
 
         champion_url = f'http://ddragon.leagueoflegends.com/cdn/{game_version}/data/pt_BR/champion.json'
-        print(champion_mastery[0])
+        
         champion_list_id = []
         if len(champion_mastery) > 0:
           champ_pool = 0

@@ -37,7 +37,15 @@
       </div>
       <div class="form_field_div">
         <label for="{{ form.password1.id_for_label }}">Senha:</label>
-        {{ form.password1 }}
+        <div>
+          <div style="display: flex;">
+            {{ form.password1 }}
+          
+            <button style="padding: 0" id="toggle_vision" type="button">
+              <img id="pass_eye" style="height: 20px; width: 20px; margin-left: -30px" src="../static/users/images/icons/eye.svg" alt="toggle_vision">
+            </button>
+          </div>
+        </div>
       </div>
       <div class="form_field_div">
         <label for="{{ form.password2.id_for_label }}">Confirmar senha:</label>
@@ -50,22 +58,33 @@
     </form>
     <p class="form_info_message">Já tem uma conta? Faça login <a href="/login">aqui.</a></p>
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-      <b style="color: #b42f2f;">{{ error }}</b>
+      <b style="color: #b42f2f; text-align: center;">{{ error }}</b>
       <button class="btn form_button purple_button" form="register_form" type="submit">REGISTRAR</button>
     </div>
   </div>
 </div>
+
+{{ type|json_script:"json-type" }}
+
+<script>
+  is_shown = false
+  $('#toggle_vision').click(() => {
+    var show_pass = ($('#id_password1').attr('type') == 'password' ? 'text' : 'password')
+    $('#id_password1').attr('type', show_pass)
+    $('#id_password2').attr('type', show_pass)
+
+    $('#id_password1').attr('type') == 'password' ? $('#pass_eye').attr('src', '../static/users/images/icons/eye.svg') : $('#pass_eye').attr('src', '../static/users/images/icons/eye-off.svg')
+    $('#id_password2').attr('type') == 'password' ? $('#pass_eye').attr('src', '../static/users/images/icons/eye.svg') : $('#pass_eye').attr('src', '../static/users/images/icons/eye-off.svg')
+  })
+</script>
+
+<!-- ERROR FIELD -->
+<script>
+  const type = JSON.parse(document.getElementById('json-type').textContent);
+  if (type != '') {
+    console.log(type)
+    $('#'+type).addClass('error_field')
+  }
+</script>
 {% endblock %}
 
-<!--
-  {% for field in form %}
-  
-    <div>
-      {{ field.label_tag }}
-      {{ field }}
-    </div>
-    {% for mistake in field.errors %}
-      
-    {% endfor %}
-  {% endfor %}
--->

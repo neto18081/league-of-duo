@@ -38,7 +38,7 @@
               <div id="chat_input_div">
                 <div>
                   <div class="control">
-                    <input class="input" type="text" placeholder="Escreva sua mensagem..." id="chat-message-input">
+                    <input class="input" type="text" placeholder="Escreva sua mensagem..." id="chat-message-input" maxlength="50">
                   </div>
                 </div>
 
@@ -148,27 +148,32 @@
       objDiv.scrollTop = objDiv.scrollHeight;
     }
     $('#chat-message-submit').click(function(){
-      const room_name = JSON.parse(document.getElementById('json-roomname').textContent);
-      const username = JSON.parse(document.getElementById('json-username').textContent);
-      $.ajax({
-        type:'POST',
-        url:'send/',
-        data:{
-          username: username,
-          room_name: room_name,
-          message: $('#chat-message-input').val(),
-        },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
-        success: function(data){
-          var chat_messages = $('#chat-messages')
+      var message = $('#chat-message-input').val()
+      if (message == '') {
+        alert('A mensagem não pode ser vazia!')
+      } else {
+        const room_name = JSON.parse(document.getElementById('json-roomname').textContent);
+        const username = JSON.parse(document.getElementById('json-username').textContent);
+        $.ajax({
+          type:'POST',
+          url:'send/',
+          data:{
+            username: username,
+            room_name: room_name,
+            message: message,
+          },
+          headers: { "X-CSRFToken": "{{ csrf_token }}" },
+          success: function(data){
+            var chat_messages = $('#chat-messages')
 
-          chat_messages.append(
-            `<div class="my_message"><p >${data.message}</p></div>
-          `)
-          scrollToBottom()
-        }
-      });
-      $('#chat-message-input').val('')
+            chat_messages.append(
+              `<div class="my_message"><p >${data.message}</p></div>
+            `)
+            scrollToBottom()
+          }
+        });
+        $('#chat-message-input').val('')
+      }
     })
     </script>
     <!-- ATUALIZAR MENSAGENS -->
@@ -177,39 +182,41 @@
         let objDiv = document.getElementById("chat-messages");
         objDiv.scrollTop = objDiv.scrollHeight;
       }
-      setInterval(function(){
-       const room_name = JSON.parse(document.getElementById('json-roomname').textContent); 
-        $.ajax({
-            type: 'POST',
-            url : "get_messages/",
-            data: {
-              room_name: room_name,
-            },
-            headers: { "X-CSRFToken": "{{ csrf_token }}" },
-            success: function(data){
-              //$("#display").empty();
-              $('#chat-messages').html('')
-              var messages = data.messages
-              for (i in messages) {
-                var username_lol = messages[i].username
-                var message = messages[i].message
-                if (username_lol == data.username) {
-                  $('#chat-messages').append(
-                    `<div class="my_message"><p >${message}</p></div>
-                  `)
-                } else {
-                  $('#chat-messages').append(
-                    `<div class="duo_message"><p >${message}</p></div>
-                  `)
+      $('.chat_button').click(function(){
+        setInterval(function(){
+        const room_name = JSON.parse(document.getElementById('json-roomname').textContent); 
+          $.ajax({
+              type: 'POST',
+              url : "get_messages/",
+              data: {
+                room_name: room_name,
+              },
+              headers: { "X-CSRFToken": "{{ csrf_token }}" },
+              success: function(data){
+                //$("#display").empty();
+                $('#chat-messages').html('')
+                var messages = data.messages
+                for (i in messages) {
+                  var username_lol = messages[i].username
+                  var message = messages[i].message
+                  if (username_lol == data.username) {
+                    $('#chat-messages').append(
+                      `<div class="my_message"><p >${message}</p></div>
+                    `)
+                  } else {
+                    $('#chat-messages').append(
+                      `<div class="duo_message"><p >${message}</p></div>
+                    `)
+                  }
                 }
+                scrollToBottom()
+              },
+              error: function(response){
+                console.log('Error')
               }
-              scrollToBottom()
-            },
-            error: function(response){
-              console.log('Error')
-            }
-        });
-      },5000);
+          });
+        },5000);
+      })
     </script>
 
     <!-- AJAX REQUEST -->

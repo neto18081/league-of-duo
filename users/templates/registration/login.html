@@ -26,18 +26,32 @@
       </div>
       <div class="form_field_div">
         <label for="{{ form.password.id_for_label }}">Senha:</label>
-        {{ form.password }}
+        <div style="display: flex">
+          {{ form.password }}
+          <button style="padding: 0" id="toggle_vision" type="button">
+            <img id="pass_eye" style="height: 20px; width: 20px; margin-left: -30px" src="../../static/users/images/icons/eye.svg" alt="toggle_vision">
+          </button>
+        </div>
       </div>
       <p class="form_info_message">Ainda não tem uma conta? Registre-se <a href="/register">aqui.</a></p>
     </form>
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
       {% for error in form.errors %}
-        <strong style="color: #b42f2f">Usuário ou senha incorretos</strong>
+        <strong style="color: #b42f2f; text-align: center;">Usuário ou senha incorretos</strong>
       {% endfor %}
       <button form="login_form" class="btn form_button yellow_button" type="submit">LOGAR</button>
       <a class="form_info_message" href="/register">Esqueci minha senha</a>
     </div>
   </div>
 </div>
+<script>
+  is_shown = false
+  $('#toggle_vision').click(() => {
+    var show_pass = ($('#id_password').attr('type') == 'password' ? 'text' : 'password')
+    $('#id_password').attr('type', show_pass)
 
+    $('#id_password').attr('type') == 'password' ? $('#pass_eye').attr('src', '../../static/users/images/icons/eye.svg') : $('#pass_eye').attr('src', '../../static/users/images/icons/eye-off.svg')
+    
+  })
+</script>
 {% endblock %}

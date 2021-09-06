@@ -97,12 +97,17 @@ def send(request):
     message = request.POST.get('message')
     username = request.POST.get('username')
 
-    print(room_name)
     room = Room.objects.filter(name=room_name)
     db_msg = room[0].messages
+    if len(db_msg) >= 10:
+      extra_msg = len(db_msg) - 10
+      del db_msg[0:extra_msg]
+
     # Receive parameters and put them here (username, message)
     my_msg = {'username': username, 'message': message}
     db_msg.append(my_msg)
+    print(db_msg)
+    print(len(db_msg))
     save_message = Room.objects.filter(name=room_name).update(messages=db_msg)
     return JsonResponse({
       'username': username,
