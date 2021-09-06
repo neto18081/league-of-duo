@@ -1,0 +1,360 @@
+{% extends 'base.html' %}
+
+<!--LOAD CSS-->
+{% block meta %}
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'users/preferences.css' %}">
+{% endblock %}
+
+{% block title %}Preferences{% endblock %}
+
+{% block content %}
+  <div class="pref_section">
+    <form id="preferences_form" method="POST">
+      {% csrf_token %}
+      <div class="pref_form_elements">
+        <div class="pref_form_section1">
+          <div class="form_section_title">
+            <h2 class="form_title">League of Duo</h2>
+            <p class="form_subtitle">Digite de acordo com suas preferências!</p>
+          </div>
+          <div class="form_field_div">
+            <label for="{{ form.birth.id_for_label }}">Data de nascimento:</label>
+            <div id="birth_field">
+              {{ form.birth }}
+            </div>
+          </div>
+          <div id="bio_div" class="form_field_div">
+            <label for="{{ form.bio.id_for_label }}">Bio:</label>
+            {{ form.bio }}
+          </div>
+        </div>
+        <div class="pref_form_section2">
+          <div class="form_field_div">
+            <label class="mobile_break_label" for="{{ form.duo_position.id_for_label }}">Posição que você procura em um duo:</label>
+            <div class="form_select">
+              <div class="duo_position_0">
+                {{ form.duo_position.0 }}
+              </div>
+              <div class="duo_position_1">
+                {{ form.duo_position.1 }}
+              </div>
+              <div class="duo_position_2">
+                {{ form.duo_position.2 }}
+              </div>
+              <div class="duo_position_3">
+                {{ form.duo_position.3 }}
+              </div>
+              <div class="duo_position_4">
+                {{ form.duo_position.4 }}
+              </div>
+            </div>
+          </div>
+          <div class="form_field_div">
+            <label for="{{ form.first_position.id_for_label }}">Sua posição primária:</label>
+            <div class="form_select">
+              <div class="duo_position_0">
+                {{ form.first_position.0 }}
+              </div>
+              <div class="duo_position_1">
+                {{ form.first_position.1 }}
+              </div>
+              <div class="duo_position_2">
+                {{ form.first_position.2 }}
+              </div>
+              <div class="duo_position_3">
+                {{ form.first_position.3 }}
+              </div>
+              <div class="duo_position_4">
+                {{ form.first_position.4 }}
+              </div>
+            </div>
+          </div>
+          <div class="form_field_div">
+            <label for="{{ form.second_position.id_for_label }}">Sua posição secundária:</label>
+            <div class="form_select">
+              <div class="duo_position_0">
+                {{ form.second_position.0 }}
+              </div>
+              <div class="duo_position_1">
+                {{ form.second_position.1 }}
+              </div>
+              <div class="duo_position_2">
+                {{ form.second_position.2 }}
+              </div>
+              <div class="duo_position_3">
+                {{ form.second_position.3 }}
+              </div>
+              <div class="duo_position_4">
+                {{ form.second_position.4 }}
+              </div>
+            </div>
+          </div>
+          <div class="form_field_div">
+            <label for="{{ form.gender.id_for_label }}">Seu gênero:</label>
+            <div class="gender_select">
+              {{ form.gender }}
+            </div>
+          </div>
+
+          {% for field in form %}
+            {% for mistake in field.errors %}
+            {% endfor %}
+          {% endfor %}
+          <b style="color: #b42f2f; text-align: center; padding: 5px 0;">{{ error }}</b>
+          <button id="pref_button" class="btn" type='submit'>SALVAR</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <script>
+    $('#bio_div').append(`<p>0/150</p>`)
+    var bio_cont = $('#bio_div').children("p").html(`${$('#id_bio').val().length}/150`)
+
+    $('#id_bio').bind('input propertychange', () => {
+      var bio_field = $('#id_bio')
+      var bio_length = bio_field.val().length
+
+      if (bio_length >= 149) {
+        bio_field.val(bio_field.val().slice(0, 150))
+        bio_length = 150
+      }
+      bio_cont.html(`${bio_length}/150`)
+    })
+    
+    $('.duo_position_0').children('label').append('<img id="duo_position_image_1" class="select_image" src="../static/users/images/position_image/top.png" >')
+    $('.duo_position_1').children('label').append('<img class="select_image" src="../static/users/images/position_image/jg.png" >')
+    $('.duo_position_2').children('label').append('<img class="select_image" src="../static/users/images/position_image/mid.png" >')
+    $('.duo_position_3').children('label').append('<img class="select_image" src="../static/users/images/position_image/adc.png" >')
+    $('.duo_position_4').children('label').append('<img class="select_image" src="../static/users/images/position_image/sup.png" >')
+  </script>
+
+  <script>
+    $('#id_birth_month')
+    .html('<option value="1" selected>Janeiro</option>')
+    .append('<option value="2">Fevereiro</option>')
+    .append('<option value="3">Março</option>')
+    .append('<option value="4">Abril</option>')
+    .append('<option value="5">Maio</option>')
+    .append('<option value="6">Junho</option>')
+    .append('<option value="7">Julho</option>')
+    .append('<option value="8">Agosto</option>')
+    .append('<option value="9">Setembro</option>')
+    .append('<option value="10">Outubro</option>')
+    .append('<option value="11">Novembro</option>')
+    .append('<option value="12">Dezembro</option>')
+  </script>
+
+
+  <script>
+    if($('#id_duo_position_0').prop('checked') == true) {
+      $('#id_duo_position_0').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_duo_position_0').siblings().css('filter', 'brightness(40%)')
+    }
+    $('#id_duo_position_0').on('click', ()=> {
+      if($('#id_duo_position_0').prop('checked') == true) {
+        $('#id_duo_position_0').siblings().css('filter', 'brightness(100%)')
+      } else {
+        $('#id_duo_position_0').siblings().css('filter', 'brightness(40%)')
+      }
+    })
+
+    if($('#id_duo_position_1').prop('checked') == true) {
+      $('#id_duo_position_1').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_duo_position_1').siblings().css('filter', 'brightness(40%)')
+    }
+    $('#id_duo_position_1').on('click', ()=> {
+      if($('#id_duo_position_1').prop('checked') == true) {
+        $('#id_duo_position_1').siblings().css('filter', 'brightness(100%)')
+      } else {
+        $('#id_duo_position_1').siblings().css('filter', 'brightness(40%)')
+      }
+    })
+
+    if($('#id_duo_position_2').prop('checked') == true) {
+      $('#id_duo_position_2').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_duo_position_2').siblings().css('filter', 'brightness(40%)')
+    }
+    $('#id_duo_position_2').on('click', ()=> {
+      if($('#id_duo_position_2').prop('checked') == true) {
+        $('#id_duo_position_2').siblings().css('filter', 'brightness(100%)')
+      } else {
+        $('#id_duo_position_2').siblings().css('filter', 'brightness(40%)')
+      }
+    })
+
+    if($('#id_duo_position_3').prop('checked') == true) {
+      $('#id_duo_position_3').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_duo_position_3').siblings().css('filter', 'brightness(40%)')
+    }
+    $('#id_duo_position_3').on('click', ()=> {
+      if($('#id_duo_position_3').prop('checked') == true) {
+        $('#id_duo_position_3').siblings().css('filter', 'brightness(100%)')
+      } else {
+        $('#id_duo_position_3').siblings().css('filter', 'brightness(40%)')
+      }
+    })
+    
+    if($('#id_duo_position_4').prop('checked') == true) {
+      $('#id_duo_position_4').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_duo_position_4').siblings().css('filter', 'brightness(40%)')
+    }
+    $('#id_duo_position_4').on('click', ()=> {
+      if($('#id_duo_position_4').prop('checked') == true) {
+        $('#id_duo_position_4').siblings().css('filter', 'brightness(100%)')
+      } else {
+        $('#id_duo_position_4').siblings().css('filter', 'brightness(40%)')
+      }
+    })
+
+  </script>
+
+  <script>
+    if($('#id_first_position_0').prop('checked') == true) {
+      $('#id_first_position_0').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_first_position_0').siblings().css('filter', 'brightness(40%)')
+    }
+    if($('#id_first_position_1').prop('checked') == true) {
+      $('#id_first_position_1').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_first_position_1').siblings().css('filter', 'brightness(40%)')
+    }
+    if($('#id_first_position_2').prop('checked') == true) {
+      $('#id_first_position_2').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_first_position_2').siblings().css('filter', 'brightness(40%)')
+    }
+    if($('#id_first_position_3').prop('checked') == true) {
+      $('#id_first_position_3').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_first_position_3').siblings().css('filter', 'brightness(40%)')
+    }
+    if($('#id_first_position_4').prop('checked') == true) {
+      $('#id_first_position_4').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_first_position_4').siblings().css('filter', 'brightness(40%)')
+    }
+
+    $('#id_first_position_0').on('click', ()=> {
+      if($('#id_first_position_0').prop('checked') == true) {
+        for(var i = 0; i < 5; i++) {
+          $(`#id_first_position_${i}`).siblings().css('filter', 'brightness(40%)')
+        }
+        $('#id_first_position_0').siblings().css('filter', 'brightness(100%)')
+      }
+    })
+    $('#id_first_position_1').on('click', ()=> {
+      if($('#id_first_position_1').prop('checked') == true) {
+        for(var i = 0; i < 5; i++) {
+          $(`#id_first_position_${i}`).siblings().css('filter', 'brightness(40%)')
+        }
+        $('#id_first_position_1').siblings().css('filter', 'brightness(100%)')
+      }
+    })
+    $('#id_first_position_2').on('click', ()=> {
+      if($('#id_first_position_2').prop('checked') == true) {
+        for(var i = 0; i < 5; i++) {
+          $(`#id_first_position_${i}`).siblings().css('filter', 'brightness(40%)')
+        }
+        $('#id_first_position_2').siblings().css('filter', 'brightness(100%)')
+      }
+    })
+    $('#id_first_position_3').on('click', ()=> {
+      if($('#id_first_position_3').prop('checked') == true) {
+        for(var i = 0; i < 5; i++) {
+          $(`#id_first_position_${i}`).siblings().css('filter', 'brightness(40%)')
+        }
+        $('#id_first_position_3').siblings().css('filter', 'brightness(100%)')
+      }
+    })
+    $('#id_first_position_4').on('click', ()=> {
+      if($('#id_first_position_4').prop('checked') == true) {
+        for(var i = 0; i < 5; i++) {
+          $(`#id_first_position_${i}`).siblings().css('filter', 'brightness(40%)')
+        }
+        $('#id_first_position_4').siblings().css('filter', 'brightness(100%)')
+      }
+    })
+  </script>
+  <script>
+    if($('#id_second_position_0').prop('checked') == true) {
+      $('#id_second_position_0').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_second_position_0').siblings().css('filter', 'brightness(40%)')
+    }
+    if($('#id_second_position_1').prop('checked') == true) {
+      $('#id_second_position_1').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_second_position_1').siblings().css('filter', 'brightness(40%)')
+    }
+    if($('#id_second_position_2').prop('checked') == true) {
+      $('#id_second_position_2').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_second_position_2').siblings().css('filter', 'brightness(40%)')
+    }
+    if($('#id_second_position_3').prop('checked') == true) {
+      $('#id_second_position_3').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_second_position_3').siblings().css('filter', 'brightness(40%)')
+    }
+    if($('#id_second_position_4').prop('checked') == true) {
+      $('#id_second_position_4').siblings().css('filter', 'brightness(100%)')
+    } else {
+      $('#id_second_position_4').siblings().css('filter', 'brightness(40%)')
+    }
+
+    $('#id_second_position_0').on('click', ()=> {
+      if($('#id_second_position_0').prop('checked') == true) {
+        for(var i = 0; i < 5; i++) {
+          $(`#id_second_position_${i}`).siblings().css('filter', 'brightness(40%)')
+        }
+        $('#id_second_position_0').siblings().css('filter', 'brightness(100%)')
+      }
+    })
+    $('#id_second_position_1').on('click', ()=> {
+      if($('#id_second_position_1').prop('checked') == true) {
+        for(var i = 0; i < 5; i++) {
+          $(`#id_second_position_${i}`).siblings().css('filter', 'brightness(40%)')
+        }
+        $('#id_second_position_1').siblings().css('filter', 'brightness(100%)')
+      }
+    })
+    $('#id_second_position_2').on('click', ()=> {
+      if($('#id_second_position_2').prop('checked') == true) {
+        for(var i = 0; i < 5; i++) {
+          $(`#id_second_position_${i}`).siblings().css('filter', 'brightness(40%)')
+        }
+        $('#id_second_position_2').siblings().css('filter', 'brightness(100%)')
+      }
+    })
+    $('#id_second_position_3').on('click', ()=> {
+      if($('#id_second_position_3').prop('checked') == true) {
+        for(var i = 0; i < 5; i++) {
+          $(`#id_second_position_${i}`).siblings().css('filter', 'brightness(40%)')
+        }
+        $('#id_second_position_3').siblings().css('filter', 'brightness(100%)')
+      }
+    })
+    $('#id_second_position_4').on('click', ()=> {
+      if($('#id_second_position_4').prop('checked') == true) {
+        for(var i = 0; i < 5; i++) {
+          $(`#id_second_position_${i}`).siblings().css('filter', 'brightness(40%)')
+        }
+        $('#id_second_position_4').siblings().css('filter', 'brightness(100%)')
+      }
+    })
+  </script>
+
+{% endblock %}
+
+<!-- 
+
+  
+ -->

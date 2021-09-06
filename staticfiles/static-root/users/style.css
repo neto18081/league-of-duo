@@ -1,0 +1,51 @@
+:root {
+  --yellow: #eeb764;
+  --dark-yellow: #e4ad5c;
+  --purple: #A64380;
+  --dark-purple: #923c71;
+  --text-color: #2f2f2f;
+  --background: #383a6a;
+  --section-background: #e9e9ea;
+  --form-border: #909090;
+  font-family: 'Nunito', sans-serif;
+}
+
+body {
+  background-color: var(--background);
+  box-sizing: border-box;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  color: var(--text-color);
+}
+textarea, button {
+  font-family: 'Nunito', sans-serif;
+  color: var(--text-color);
+}
+
+.form_button {
+  width: 16vw;
+  min-width: 150px;
+  height: 50px;
+  border-radius: 50px;
+  font-weight: 800;
+  box-shadow: 0 5px 10px var(--form-border);
+  transition: transform .3s, filter .2s;
+}
+.form_button:hover {
+  filter: brightness(90%);
+}
+.form_button:active {
+  transform: translate(0, 1px);
+}
+a:hover {
+  text-decoration: none;
+}
+
+.yellow_button {
+  background-color: var(--yellow);
+}
+
+.purple_button {
+  background-color: var(--purple);
+  color: var(--section-background);
+}

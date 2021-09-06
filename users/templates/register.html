@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+<!--LOAD CSS-->
+{% block meta %}
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'users/form.css' %}">
+{% endblock %}
+  
+{% block content %}
+<div class="register_section">
+  <div class="register_section_image">
+    <div class="form_section_title register_title_section">
+      <h2 class="form_title">League of Duo</h2>
+      <p class="form_subtitle subtitle_register">Seja bem-vindo(a)! Registre-se para continuar</p>
+    </div>
+    <img class="form_image" src="{% static 'users/images/emote_image/braum.png' %}" alt="form_image">
+  </div>
+  <div class="register_section_form">
+    <form class="form_form" id="register_form" method="POST">
+      {% csrf_token %}
+      <div class="form_field_div">
+        <label for="{{ form.username.id_for_label }}">Usuário:</label>
+        {{ form.username }}
+      </div>
+      <div class="form_field_div">
+        <label for="{{ form.username_lol.id_for_label }}">Usuário no LOL:</label>
+        {{ form.username_lol }}
+      </div>
+      <div class="form_field_div">
+        <label for="{{ form.first_name.id_for_label }}">Nome:</label>
+        {{ form.first_name }}
+      </div>
+      <div class="form_field_div">
+        <label for="{{ form.email.id_for_label }}">E-mail:</label>
+        {{ form.email }}
+      </div>
+      <div class="form_field_div">
+        <label for="{{ form.password1.id_for_label }}">Senha:</label>
+        {{ form.password1 }}
+      </div>
+      <div class="form_field_div">
+        <label for="{{ form.password2.id_for_label }}">Confirmar senha:</label>
+        {{ form.password2 }}
+      </div>
+      {% for field in form %}
+        {% for mistake in field.errors %}
+        {% endfor %}
+      {% endfor %}
+    </form>
+    <p class="form_info_message">Já tem uma conta? Faça login <a href="/login">aqui.</a></p>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <b style="color: #b42f2f;">{{ error }}</b>
+      <button class="btn form_button purple_button" form="register_form" type="submit">REGISTRAR</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!--
+  {% for field in form %}
+  
+    <div>
+      {{ field.label_tag }}
+      {{ field }}
+    </div>
+    {% for mistake in field.errors %}
+      
+    {% endfor %}
+  {% endfor %}
+-->

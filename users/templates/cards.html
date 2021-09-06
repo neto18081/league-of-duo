@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Cards{% endblock %}
+
+<!--LOAD CSS-->
+{% block meta %}
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'users/cards.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'users/navbar.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div id="cards">
+  {% if duo_filter.0 == None %}
+    <p id="card_empty1">Desculpe, nenhum duo se encaixa mais com você :(</p>
+  {% else %}
+    <div id="match_exists"></div>
+      <div id="cards_content">
+        <div class="card_header {{ summoner_tier }}">
+          <div class="profile_summoner_icon">
+            {% if summoner_tier != 'Unranked' %}
+              <img id="summoner_tier" class="profile_tier_image" src="../static/users/images/ranks/{{ summoner_tier }}.png" alt="tier_image">
+              <img id='card_image' src="{{ profile_icon_url }}">
+            {% else %}
+              <img id='unranked_card_image' src="{{ profile_icon_url }}">
+            {% endif %}
+          </div>
+          <div class="card_header_text">
+            <strong id="card_username">{{ duo_filter.0.user.username_lol }}</strong>
+            <p id="card_name">{{ duo_filter.0.user.first_name }}</p>
+            <div class="card_position">
+              <img class="card_position_image" id="card_position1" src="../static/users/images/position_image/{{ duo_filter.0.first_position }}.png">
+              <img class="card_position_image" id="card_position2" src="../static/users/images/position_image/{{ duo_filter.0.second_position }}.png">
+            </div>
+          </div>
+        </div>
+        <div class="card_body">
+          <div class="card_champions">
+            <img src="{{ champion_image.0 }}" alt="champion_image">
+            <img src="{{ champion_image.1 }}" alt="champion_image">
+            <img src="{{ champion_image.2 }}" alt="champion_image">
+          </div>
+          <p id="card_bio">{{ duo_filter.0.bio }}</p>
+        </div>
+
+      </div>
+      <!--BOTÕES (ACEITAR/RECUSAR)-->
+      <div class="card_buttons">
+      <button
+      class="btn card_button card_button_refuse"
+      id="refuse"
+      value="refuse,{{ duo_filter.0.user_id }}">
+        <img class="card_button_icon" src="../static/users/images/icons/refuse_icon.png" alt="">
+      </button>
+      <button
+      class="btn card_button card_button_accept"
+      id="accept"
+      value="accept,{{ duo_filter.0.user_id }}">
+        <img class="card_button_icon" src="../static/users/images/icons/accept_icon.png" alt="">
+      </button>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <b>League of Duo</b>
+    <a href="/profile" class="navbar_item">
+      <p class="desktop_navbar_text">Perfil</p>
+      <img class="mobile_navbar_icon" src="../static/users/images/icons/profile.png" alt=""></a>
+    <a href="/cards"class="navbar_item navbar_button_active">
+      <p class="desktop_navbar_text">Cards</p>
+      <img class="mobile_navbar_icon" src="../static/users/images/icons/cards.png" alt=""></a>
+    <a href="/chat"class="navbar_item">
+      <p class="desktop_navbar_text">Chat</p>
+      <img class="mobile_navbar_icon" src="../static/users/images/icons/chat.png" alt=""></a>
+  </div>
+
+  <script>
+    var card_height = $('#cards_content').height()
+    var window_height = $(window).height()
+    var window_width = $(window).width()
+    var card_width = $('#cards_content').width()
+    var button_width = $('.card_button').width()
+    var button_height = $('.card_button').height()
+
+    $('.card_button_refuse').css('margin-right', ((card_width / 2) - button_width*2))
+
+    $('.card_buttons').css('top', card_height + 20)
+
+    if (window_height <= (card_height + 50 + button_height + 75)) {
+      $('body').css('height', 1.1*window_height)
+    }
+
+    if (window_width <= 1024 && window_width >= 768) {
+      $('.card_button_refuse').css('margin-right', card_width)
+    }
+    if (window_width <= 280) {
+      $('.card_button_refuse').css('margin-right', (card_width/2)  - (button_width*2))
+    }
+
+  </script>
+  
+{% endblock %}

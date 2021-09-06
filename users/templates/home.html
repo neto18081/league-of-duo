@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+<!--LOAD CSS-->
+{% block meta %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'users/home.css'%}">
+{% endblock %}
+
+{% block content %}
+  <div id="home">
+    <nav id='navbar'>
+      <h2 id="navbar_title">League of Duo</h2>
+      <button class="btn" id="navbar_mobile_button">
+        <div id="mobile_button_1" class="button_line"></div>
+        <div id="mobile_button_2" class="button_line"></div>
+        <div id="mobile_button_3" class="button_line"></div>
+      </button>
+      <ul id="navbar_items">
+        <a class="navbar_item" href="#about_section">COMO FUNCIONA?</a>
+        <a class="navbar_item" href="/register">REGISTRAR</a>
+        <a class="navbar_item" href="/login">LOGIN</a>
+      </ul>
+    </nav>
+    <div id="home_section">
+      <img id="home_image" src="../static/users/images/images/home_image.png" alt="home_image">
+      <div id="header_text">
+        <b>Cansado de jogar sozinho(a)?</b>
+        <p>Ache o duo perfeito para você agora mesmo!</p>
+        <a href="/register"><button class="btn">REGISTRAR</button></a>
+      </div>
+      <div id="about_section">
+        <!-- <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#fff" fill-opacity="1" d="M0,128L720,256L1440,160L1440,0L720,0L0,0Z"></path></svg> -->
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#fff" fill-opacity="1" d="M0,128L720,256L1440,160L1440,320L720,320L0,320Z"></path></svg> -->
+
+        <div class="about_step">
+          <h3>01</h3>
+          <p>Crie uma conta</p>
+        </div>
+        <div class="about_step">
+          <p>Diga do que você joga e quem você procura para jogar</p>
+          <h3>02</h3>
+        </div>
+        <div class="about_step">
+          <h3>03</h3>
+          <p>Veja todos os duos possíveis pra você!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    var window_width = $(window).width();
+    var is_show = false
+    $('#navbar_mobile_button').click(() => {
+      if (!is_show) {
+        $('body').css({
+          overflow: 'hidden',
+          position: 'relative'
+        })
+        $('html').css({
+          overflow: 'hidden',
+          position: 'relative'
+        })
+        $('#mobile_button_1').css({
+          transform: 'rotate(45deg) translate(0, 6px)',
+          transition: 'transform .4s ease-out'
+        })
+        $('#mobile_button_2').css({
+          display: 'none'
+        })
+        $('#mobile_button_3').css({
+          transform: 'rotate(-45deg) translate(0,-6px)',
+          transition: 'transform .4s ease-out'
+        })
+
+        $('#navbar_items').css({
+          transform: 'translateX(0)',
+          transition: 'transform .4s ease-out'
+        })
+        is_show = true
+      } else {
+        $('body').css({
+          overflow: 'scroll',
+        })
+        $('html').css({
+          overflow: 'scroll',
+        })
+        $('#mobile_button_1').css({
+          transform: 'rotate(0) translate(0, 0)',
+          transition: 'transform .4s ease-out'
+        })
+        $('#mobile_button_2').css({
+          display: 'block',
+          transition: 'display .4s ease-out'
+        })
+        $('#mobile_button_3').css({
+          transform: 'rotate(0) translate(0)',
+          transition: 'transform .4s ease-out'
+        })
+
+        $('#navbar_items').css({
+          transform: 'translateX(100%)',
+          transition: 'transform .4s ease-out'
+        })
+        is_show = false
+      }
+    })
+    if (window_width <= 1024) {
+      $('.navbar_item').click(() => {
+        $('body').css({
+          overflow: 'scroll',
+        })
+        $('html').css({
+          overflow: 'scroll',
+        })
+        $('#mobile_button_1').css({
+          transform: 'rotate(0) translate(0, 0)',
+          transition: 'transform .4s ease-out'
+        })
+        $('#mobile_button_2').css({
+          display: 'block',
+          transition: 'display .4s ease-out'
+        })
+        $('#mobile_button_3').css({
+          transform: 'rotate(0) translate(0)',
+          transition: 'transform .4s ease-out'
+        })
+  
+        $('#navbar_items').css({
+          transform: 'translateX(100%)',
+          transition: 'transform .4s ease-out'
+        })
+        is_show = false
+      })
+    }
+    
+  </script>
+{% endblock %}

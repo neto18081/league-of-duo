@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% block title %}Perfil{% endblock %}
+
+<!--LOAD CSS-->
+{% block meta %}
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'users/profile.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'users/navbar.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div id="profile">
+    <div class="profile_section_1">
+      <div class="profile_section_image">
+          {% if summoner_tier != 'Unranked' %}
+          <div class="profile_summoner_icon">
+            <img class="profile_tier_image" src="../static/users/images/ranks/{{ summoner_tier }}.png" alt="tier_image">
+            <img id="profile_user_icon" src="{{profile_icons_url}}" alt="profile_image">
+          </div>
+          {% else %}
+          <div class="profile_unranked_header">
+            <img id="unranked" src="{{profile_icons_url}}" alt="profile_image">
+          </div>
+          {% endif %}
+        <div class="profile_section_username">
+          <div class="profile_name">
+            <strong class="profile_username">{{user.username_lol}}</strong>
+            <span class="profile_first_name">{{user.first_name}}</span>
+          </div>
+          <div class="profile_section_position">
+            <img class="profile_position_image" src="../static/users/images/position_image/{{userpref.first_position}}.png" alt="first_position_image">
+            <img class="profile_position_image" src="../static/users/images/position_image/{{userpref.second_position}}.png" alt="second_position_image">
+          </div>
+        </div>
+      </div>
+      <p class="profile_bio">{{ userpref.bio }}</p>
+    </div>
+    <div class="profile_section_2">
+      <h3 class="profile_settings_title">Configurações</h3>
+      <div>
+        <p class="profile_buttons_description">Alterar perfil e filtro de duos</p>
+        <button id="preferences_button" type="button" class="btn form_button yellow_button">
+          ALTERAR PERFIL
+        </button>
+        <button id="logout_button" type="button" class="btn form_button yellow_button">
+          DESLOGAR
+        </button>
+      </div>
+      <div>
+        <p class="profile_buttons_description">Configurações da conta</p>
+        <button type="button" class="btn form_button purple_button" data-toggle="modal" data-target="#clearMatches">
+          RESETAR MATCHES
+        </button>
+        <button type="button" class="btn form_button purple_button" data-toggle="modal" data-target="#clearRefused">
+          RESETAR RECUSADOS
+        </button>
+      </div>
+      <div>
+        <p class="profile_buttons_description">Excluir conta</p>
+        <button type="button" class="btn form_button purple_button" data-toggle="modal" data-target="#deleteAccount">
+          EXCLUIR CONTA
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <b>League of Duo</b>
+    <a href="/profile" class="navbar_item navbar_button_active">
+      <p class="desktop_navbar_text">Perfil</p>
+      <img class="mobile_navbar_icon" src="../static/users/images/icons/profile.png" alt=""></a>
+    <a href="/cards"class="navbar_item">
+      <p class="desktop_navbar_text">Cards</p>
+      <img class="mobile_navbar_icon" src="../static/users/images/icons/cards.png" alt=""></a>
+    <a href="/chat"class="navbar_item">
+      <p class="desktop_navbar_text">Chat</p>
+      <img class="mobile_navbar_icon" src="../static/users/images/icons/chat.png" alt=""></a>
+  </div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteAccount" tabindex="-1" role="dialog" aria-labelledby="deleteAccountLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="delete_account_body" class="modal-body">
+        Você tem certeza que quer excluir sua conta? Isso não tem volta.
+      </div>
+      <div class="modal-footer">
+        <button id="delete_account" type="button" class="btn purple_button">Sim</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="clearMatches" tabindex="-1" role="dialog" aria-labelledby="clearMatchesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="clear_matches_body" class="modal-body">
+        Você tem certeza que quer resetar os duos aceitos? Isso não tem volta.
+      </div>
+      <div class="modal-footer">
+        <button id="clear_matches" type="button" class="btn purple_button">Sim</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="clearRefused" tabindex="-1" role="dialog" aria-labelledby="clearRefusedLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="clear_refused_body" class="modal-body">
+        Você tem certeza que quer resetar os duos recusados?
+      </div>
+      <div class="modal-footer">
+        <button id="clear_refused" type="button" class="btn purple_button">Sim</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var body_height = $('body').height()
+  var window_width = $(window).width()
+  if (window_width <= 414) {
+    $('body').css('height',body_height+300)
+  }
+
+  $('#delete_account').on('click', () => {
+    var delete_account_body = $('#delete_account_body')
+    delete_account_body.html('Conta deletada!')
+
+    setTimeout(() => {
+      $.ajax({
+        url: '/delete_account/',
+        type: 'POST',
+        data: { delete_account: 'True' },
+        async: true,
+        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+
+        success: () => {
+          window.location.replace(window.location.origin)
+        }
+      })
+    }, 1000)
+  })
+
+  $('#clear_matches').on('click', () => {
+    var clear_matches_body = $('#clear_matches_body')
+    clear_matches_body.html('Limpando matches...')
+
+    setTimeout(() => {
+      $.ajax({
+        url: '/clear_matches/',
+        type: 'POST',
+        data: { clear_matches: 'True' },
+        async: true,
+        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+
+        success: () => {
+          window.location.replace(window.location.origin+"/profile")
+        }
+      })
+    }, 1000)
+  })
+
+  $('#clear_refused').on('click', () => {
+    var clear_refused_body = $('#clear_refused_body')
+    clear_refused_body.html('Limpando recusados...')
+
+    setTimeout(() => {
+      $.ajax({
+        url: '/clear_refused/',
+        type: 'POST',
+        data: { clear_refused: 'True' },
+        async: true,
+        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+
+        success: () => {
+          window.location.replace(window.location.origin+"/profile")
+        }
+      })
+    }, 1000)
+  })
+
+  $('#logout_button').on('click', () => {
+    window.location.replace(window.location.origin+'/auth/logout')
+  })
+
+  $('#preferences_button').on('click', () => {
+    window.location.assign(window.location.origin+'/preferences')
+  })
+</script>
+
+{% endblock %}
+  

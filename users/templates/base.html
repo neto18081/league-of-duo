@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+  {% block meta %}
+  {% endblock %}
+
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'users/style.css' %}">
+
+  <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+  {% block content %}
+  {% endblock %}
+
+  <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var accept_value = $('#accept').val();
+      var refuse_value = $('#refuse').val();
+      $('#refuse').on('click', function() {
+        var accept_value = $('#accept');
+        var refuse_value = $('#refuse');
+        $.ajax({
+          url: '/cards/',
+          type: 'POST',
+          data: {'duo_status': refuse_value.val()},
+          async: true,
+          headers: { "X-CSRFToken": "{{ csrf_token }}" },
+
+          success: function(data) {
+            var card_username = $('#card_username')
+            var card_name = $('#card_name')
+            var card_bio = $('#card_bio')
+            var card_position1 = $('#card_position1')
+            var card_position2 = $('#card_position2')
+            var summoner_tier = $('#summoner_tier')
+            var card_filter = $('#card_filter')
+            var profile_summoner_icon = $('.profile_summoner_icon')
+
+            console.log('Refused -> success')
+
+            if (!data.card_empty){
+              accept_value.val('accept,'+data.card_id)
+              refuse_value.val('refuse,'+data.card_id)
+              
+              card_username.html(data.card_username)
+              card_name.html(data.card_name)
+              card_bio.html(data.card_bio)
+              $('.card_header').attr('class', `card_header ${data.summoner_tier}`)
+
+              card_position1.attr('src', '../static/users/images/position_image/'+data.card_position1+'.png')
+              card_position2.attr('src', '../static/users/images/position_image/'+data.card_position2+'.png')
+              if (data.summoner_tier == 'Unranked') {
+                profile_summoner_icon
+                .html(`<img id='unranked_card_image' src='${data.card_image}'>`)
+              } else {
+                profile_summoner_icon
+                .html
+                (`<img id="summoner_tier" class="profile_tier_image" src="../static/users/images/ranks/${data.summoner_tier}.png" alt="tier_image">
+                <img id='card_image' src="${data.card_image}">`
+                )
+              }
+
+              var champion_0 = data.champion_image[0]
+              var champion_1 = data.champion_image[1]
+              var champion_2 = data.champion_image[2]
+              
+              $('.card_champions')
+              .html
+              (`<img src="${champion_0}" alt="champion_image">
+              <img src="${champion_1}" alt="champion_image">
+              <img src="${champion_2}" alt="champion_image">`)
+
+              card_filter.html(data.card_filter)
+
+            } else {
+              location.reload();
+            }
+          }
+        })
+      })
+
+      $('#accept').on('click', function() {
+        var accept_value = $('#accept');
+        var refuse_value = $('#refuse');
+        $.ajax({
+          url: '/cards/',
+          type: 'POST',
+          data: {'duo_status': accept_value.val()},
+          async: true,
+          headers: { "X-CSRFToken": "{{ csrf_token }}" },
+
+          success: function(data) {
+            var card_username = $('#card_username')
+            var card_name = $('#card_name')
+            var card_bio = $('#card_bio')
+            var card_position1 = $('#card_position1')
+            var card_position2 = $('#card_position2')
+            var summoner_tier = $('#summoner_tier')
+            var card_filter = $('#card_filter')
+            var profile_summoner_icon = $('.profile_summoner_icon')
+
+            console.log('Accepted -> success')
+
+            if (!data.card_empty){
+              accept_value.val('accept,'+data.card_id)
+              refuse_value.val('refuse,'+data.card_id)
+              
+              card_username.html(data.card_username)
+              card_name.html(data.card_name)
+              card_bio.html(data.card_bio)
+              $('.card_header').attr('class', `card_header ${data.summoner_tier}`)
+
+              card_position1.attr('src', '../static/users/images/position_image/'+data.card_position1+'.png')
+              card_position2.attr('src', '../static/users/images/position_image/'+data.card_position2+'.png')
+              if (data.summoner_tier == 'Unranked') {
+                profile_summoner_icon
+                .html(`<img id='unranked_card_image' src='${data.card_image}'>`)
+              } else {
+                profile_summoner_icon
+                .html
+                (`<img id="summoner_tier" class="profile_tier_image" src="../static/users/images/ranks/${data.summoner_tier}.png" alt="tier_image">
+                <img id='card_image' src="${data.card_image}">`
+                )
+              }
+              var champion_0 = data.champion_image[0]
+              var champion_1 = data.champion_image[1]
+              var champion_2 = data.champion_image[2]
+              
+              $('.card_champions')
+              .html
+              (`<img src="${champion_0}" alt="champion_image">
+              <img src="${champion_1}" alt="champion_image">
+              <img src="${champion_2}" alt="champion_image">`)
+
+              card_filter.html(data.card_filter)
+            } else {
+              location.reload();
+            }
+          }
+        })
+      })
+    })
+  </script>
+</body>
+</html>

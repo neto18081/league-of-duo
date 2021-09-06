@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+<!--LOAD CSS-->
+{% block meta %}
+  {% load static %} 
+  <link rel="stylesheet" type="text/css" href="{% static 'users/form.css' %}">
+{% endblock %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="login_section">
+  <div class="form_section_image">
+    <img class="form_image" src="{% static 'users/images/emote_image/neeko.png' %}" alt="form_image">
+  </div>
+  <div class="form_section_form">
+    <div class="form_section_title">
+      <h2 class="form_title">League of Duo</h2>
+      <span class="form_subtitle form_subtitle_login">Bem vindo(a) de volta!</span>
+    </div>
+    <form id="login_form" class="form_form" method="POST">
+      {% csrf_token %}
+      <div class="form_field_div">
+        <label for="{{ form.username.id_for_label }}">Usuário:</label>
+        {{ form.username }}
+      </div>
+      <div class="form_field_div">
+        <label for="{{ form.password.id_for_label }}">Senha:</label>
+        {{ form.password }}
+      </div>
+      <p class="form_info_message">Ainda não tem uma conta? Registre-se <a href="/register">aqui.</a></p>
+    </form>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      {% for error in form.errors %}
+        <strong style="color: #b42f2f">Usuário ou senha incorretos</strong>
+      {% endfor %}
+      <button form="login_form" class="btn form_button yellow_button" type="submit">LOGAR</button>
+      <a class="form_info_message" href="/register">Esqueci minha senha</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
