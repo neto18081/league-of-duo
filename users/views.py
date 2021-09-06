@@ -523,10 +523,14 @@ def preferences(request):
       bio = form['bio'].value().strip()
       bio = " ".join(bio.split())
       birth = form['birth'].value()
+      birth = birth.split('/')
+      birth = birth[2]+'-'+birth[1]+'-'+birth[0]
+
       duo_position = form['duo_position'].value()
       first_position = form['first_position'].value()
       second_position = form['second_position'].value()
       gender = form['gender'].value()
+      print(birth)
 
       if len(duo_position) == 0:
         return render(request, 'preferences.html', {'form': form, 'error': 'Você deve escolher pelo menos uma posição!'})
@@ -652,7 +656,6 @@ def clear_refused(request):
     clear_refused = request.POST.get('clear_refused')
     if clear_refused == 'True':
       reset_refused = UserPref.objects.filter(user_id=request.user.id).update(duo_refused=request.user.id)
-      reset_accepted = UserPref.objects.filter(user_id=request.user.id).update(duo_accepted=0)
   return redirect('home')
 
 
