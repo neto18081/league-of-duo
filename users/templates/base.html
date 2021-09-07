@@ -96,7 +96,7 @@
 
       $('#accept').on('click', function() {
         var accept_value = $('#accept');
-        var refuse_value = $('#refuse');
+        var refuse_value = $('#refuse'); 
         $.ajax({
           url: '/cards/',
           type: 'POST',
@@ -105,6 +105,20 @@
           headers: { "X-CSRFToken": "{{ csrf_token }}" },
 
           success: function(data) {
+            if (data.match_exists) {
+              $('#match_exists').html('<b>+1 MATCH</b>').css({
+                'font-size': '30px',
+                'position': 'absolute',
+                'color' : 'var(--yellow)',
+                'bottom': '30px',
+                'right': '10vw'
+              }).animate({
+                'bottom': '+=50px',
+                'opacity': '0'
+              },{ 
+                duration: 1500,
+              })
+            }
             var card_username = $('#card_username')
             var card_name = $('#card_name')
             var card_bio = $('#card_bio')
