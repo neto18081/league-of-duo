@@ -34,13 +34,13 @@ def register(request):
     summoner_password1 = form['password1'].value()
     summoner_password2 = form['password2'].value()
 
-    username_lol_exists = User.objects.filter(username_lol__iexact=summoner_username_lol).exists()
+    """ username_lol_exists = User.objects.filter(username_lol__iexact=summoner_username_lol).exists() """
     username_exists = User.objects.filter(username__iexact=summoner_username).exists()
     email_exists = User.objects.filter(email=summoner_email).exists()
 
-    if username_lol_exists:
-      return render(request, 'register.html', {'form': form, 'error': 'Usuário do lol já cadastrado!' ,'type': 'id_username_lol'})
-    elif username_exists:
+    """ if username_lol_exists:
+      return render(request, 'register.html', {'form': form, 'error': 'Usuário do lol já cadastrado!' ,'type': 'id_username_lol'}) """
+    if username_exists:
       return render(request, 'register.html', {'form': form, 'error': 'Usuário já cadastrado!', 'type': 'id_username'})
     elif email_exists:
       return render(request, 'register.html', {'form': form, 'error': 'Email já cadastrado!','type': 'id_email'})
