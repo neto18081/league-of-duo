@@ -9,7 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800;900&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://unpkg.com/intro.js/minified/introjs.min.css">
+  
   {% block meta %}
   {% endblock %}
 
@@ -23,10 +24,32 @@
   {% endblock %}
 
   <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-  
+  <script>
+    if($('#tutorial').html() == 'True') {
+      introJs().setOptions({
+        tooltipClass: 'custom_tool_tip',
+        steps: [{
+          element: document.querySelector('#profile_profile_navbar'),
+          intro: 'Esse é o seu perfil.'
+        }, {
+          element: document.querySelector('#preferences_button'),
+          intro: 'Aqui você pode alterar suas preferências, as quais influenciarão quais cards irão aparecer para você.'
+        }, {
+          element: document.querySelector('#profile_cards_navbar'),
+          intro: 'Aqui estão os cartões, onde você encontrará possíveis duos!'
+        }, {
+          element: document.querySelector('#profile_chat_navbar'),
+          intro: 'Se você a seu duo se aceitarem, vocês verão um ao outro e poderão conversar usando o chat!'
+        }, {
+          intro: 'Divirta-se!! Se achar alguma coisa errada, por favor entre em contato. Obrigado!'
+        }]
+      }).start();
+    }
+  </script>
   <script type="text/javascript">
     $(document).ready(function() {
       var accept_value = $('#accept').val();

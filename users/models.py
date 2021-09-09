@@ -34,3 +34,4 @@ class UserPreferences(models.Model):
   duo_accepted = models.CharField(max_length=500, default=0)
   duo_match = models.CharField(max_length=500, default=0)
   match = models.CharField(max_length=500, default=0)
+  tutorial = models.BooleanField(default=1)

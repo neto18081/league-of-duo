@@ -49,3 +49,8 @@ a:hover {
   background-color: var(--purple);
   color: var(--section-background);
 }
+
+.custom_tool_tip {
+  background-color: var(--section-background);
+  color: var(--text-color);
+}

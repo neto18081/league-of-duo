@@ -107,11 +107,15 @@ def profile(request):
     else:
       up = None
       return redirect('/preferences')
-    
+
+    tutorial = UserPref.objects.filter(user_id=request.user.id)[0].tutorial
+    update_tutorial = UserPref.objects.filter(user_id=request.user.id).update(tutorial=False)
+    print("Tutorial:",tutorial)
     return render(request, 'profile.html', {
       'profile_icons_url':profile_icon_url,
       'userpref': up,
-      'summoner_tier': summoner_tier
+      'summoner_tier': summoner_tier,
+      'tutorial': tutorial
       })
   else:
     return redirect('home')
