@@ -6,10 +6,15 @@ from users.models import User, UserPreferences as UserPref
 from django.shortcuts import redirect, render
 from users.forms import UserCreationForm, UserPreferences
 import urllib.request, json
+from django.contrib.auth.hashers import make_password
+
+from email.message import EmailMessage
+import smtplib
 
 from riotwatcher import LolWatcher
 from decouple import config
 from random import shuffle
+import secrets
 
 game_version = config('GAME_VERSION')
 
@@ -18,7 +23,68 @@ def riot(request):
 
 def home(request):
   return render(request, 'home.html')
- 
+
+def confirm_code(request):
+  if request.user.is_authenticated:
+    return redirect('/profile')
+  if request.method == 'POST':
+    confirm_code = request.POST.get('confirm_code')
+    email = request.POST.get('fp_email')
+    if confirm_code == '1':
+      raw_password = secrets.token_urlsafe(15)
+      new_password = make_password(raw_password)
+      user = User.objects.filter(email=email).update(password=new_password)
+      return JsonResponse({
+        'email_verified': 1,
+        'new_password': raw_password
+      })
+    else:
+      print('Email não verificado!')
+      return JsonResponse({
+        'email_verified': 0,
+      })
+
+def forgot_password(request):
+  if request.user.is_authenticated:
+    return redirect('/profile')
+  if request.method == "POST":
+    EMAIL_ADDRESS = config('EMAIL_ADDRESS')
+    EMAIL_TO = request.POST.get('fp_email')
+    email_exists = User.objects.filter(email__iexact=EMAIL_TO).exists()
+    if not email_exists:
+      return JsonResponse({
+        'is_valid': 0,
+        'error': 'O e-mail não está cadastrado!'
+      })
+
+    EMAIL_PASSWORD = config('EMAIL_PASSWORD')
+    CODE = secrets.token_urlsafe(6)
+
+    msg = EmailMessage()
+    msg['Subject'] = 'Confirmar e-email'
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = EMAIL_TO
+    msg.set_content('Para confirmar seu email copie esse código: 123456')
+    msg.add_alternative(f"""\
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <h1 style='color: red; font-size: 50px'>League of Duo</h1>
+        <p>Para confirmar seu email, copie o código abaixo:</p>
+        <strong>{CODE}</strong>
+      </body>
+    </html>
+    """, subtype='html')
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+      smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+      smtp.send_message(msg)
+    return JsonResponse({
+      'is_valid': 1,
+      'code': CODE
+    })
+  return render(request, 'forgot_password.html')
+
 def register(request):
   if request.user.is_authenticated:
     return redirect('/profile')
