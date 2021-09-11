@@ -143,7 +143,6 @@ def register(request):
 def profile(request):
   if request.user.is_authenticated:
     # GET SUMMONER ICON
-    # Fetch information for icon Id and for the patch version
     API_KEY = config('API_KEY')
     watcher = LolWatcher(api_key=API_KEY)
     region = 'br1'
@@ -729,6 +728,16 @@ def clear_refused(request):
       reset_refused = UserPref.objects.filter(user_id=request.user.id).update(duo_refused=request.user.id)
   return redirect('home')
 
+def reset_password(request):
+  if request.method == 'POST':
+    new_password = request.POST.get('new_password')
+    new_password = make_password(new_password)
 
+    change_password = User.objects.filter(id=request.user.id).update(password=new_password)
+    return JsonResponse({
+      'status': 'ok'
+    })
+
+  return render(request, 'reset_password.html')
 
 

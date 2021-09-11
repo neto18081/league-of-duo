@@ -37,6 +37,9 @@ textarea, button {
 .form_button:active {
   transform: translate(0, 1px);
 }
+a {
+  text-decoration: none;
+}
 a:hover {
   text-decoration: none;
 }
