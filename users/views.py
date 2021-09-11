@@ -64,17 +64,27 @@ def forgot_password(request):
     msg['Subject'] = 'Confirmar e-email'
     msg['From'] = EMAIL_ADDRESS
     msg['To'] = EMAIL_TO
-    msg.set_content('Para confirmar seu email copie esse código: 123456')
+    msg.set_content(f'Foi solicitado uma troca de senha para esse e-mail. Essa é uma mensagem de confirmação. Copie o código abaixo e cole na aba em que você fez a requisição.\n{CODE}\nSe não foi você que fez essa requisição apenas ignore essa mensagem.')
     msg.add_alternative(f"""\
     <!DOCTYPE html>
     <html>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+      </head>
       <body>
-        <h1 style='color: red; font-size: 50px'>League of Duo</h1>
-        <p>Para confirmar seu email, copie o código abaixo:</p>
-        <strong>{CODE}</strong>
+        <div style="background-color: #e9e9ea; color: #2f2f2f; border-radius: 50px; padding: 20px;">
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <h1 style="text-align: center; font-weight: 600; font-family: Nunito; font-size: 50px; margin: 20px; margin-left: 20%; width: 60%;">League of Duo</h1>
+          </div>
+          <div style="flex-direction: column; align-items: center; justify-content: center; text-align: center; width: auto;">
+            <p style="font-weight: 400; font-family: Nunito; font-size: 20px;">Foi solicitado uma troca de senha para esse e-mail. Essa é uma mensagem de confirmação. Copie o código abaixo e cole na aba em que você fez a requisição.</p>
+            <b style="font-weight: 600; font-family: Nunito; font-size: 30px;">{CODE}</b>
+            <p style="font-weight: 400; font-family: Nunito; font-size: 20px;">Se não foi você que fez essa requisição apenas ignore essa mensagem.</p>
+          </div>
+        </div>
       </body>
     </html>
-    """, subtype='html')
+""", subtype='html')
 
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
       smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
