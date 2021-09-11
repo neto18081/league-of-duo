@@ -19,7 +19,7 @@ import secrets
 game_version = config('GAME_VERSION')
 
 def riot(request):
-  return HttpResponse('<p>d24135b8-d169-4b39-a91d-c9ff74f9898e</p>')
+  return render(request, 'riot.txt')
 
 def home(request):
   return render(request, 'home.html')
