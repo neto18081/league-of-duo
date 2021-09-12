@@ -84,7 +84,7 @@ def forgot_password(request):
         </div>
       </body>
     </html>
-""", subtype='html')
+  """, subtype='html')
 
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
       smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
@@ -110,7 +110,13 @@ def register(request):
     summoner_password1 = form['password1'].value()
     summoner_password2 = form['password2'].value()
 
+    # Unique lol user
     """ username_lol_exists = User.objects.filter(username_lol__iexact=summoner_username_lol).exists() """
+
+    # Password can't look like other fields
+    password_username = len(summoner_password1.split(summoner_username))
+    password_email = len(summoner_password1.split(summoner_email))
+
     username_exists = User.objects.filter(username__iexact=summoner_username).exists()
     email_exists = User.objects.filter(email=summoner_email).exists()
 
@@ -126,6 +132,8 @@ def register(request):
       return render(request, 'register.html', {'form': form, 'error': 'A senha deve ter pelo menos 8 caracteres.','type': 'id_password1'})
     elif summoner_password1.isdecimal():
       return render(request, 'register.html', {'form': form, 'error': 'A senha deve conter letras!','type': 'id_password1'})
+    elif password_username > 1 or password_email > 1:
+      return render(request, 'register.html', {'form': form, 'error': 'A senha não pode parecer com outros campos!','type': 'id_password1'})
     else:
       # Verifica se o usuário existe no LOL
       try:

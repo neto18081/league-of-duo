@@ -35,17 +35,11 @@
                 <div id="chat-messages">
                 </div>
               </div>
-              <div id="chat_input_div">
-                <div>
-                  <div class="control">
-                    <input class="input" type="text" placeholder="Escreva sua mensagem..." id="chat-message-input" maxlength="50">
-                  </div>
-                </div>
+              <div id="chat_input_div"> 
+                <input class="input" type="text" placeholder="Escreva sua mensagem..." id="chat-message-input" maxlength="50">
 
-                <div>
-                  <div id="chat_input_button">
-                    <a id="chat-message-submit">ENVIAR</a> 
-                  </div>
+                <div id="chat_input_button">
+                  <a id="chat-message-submit">ENVIAR</a> 
                 </div>
               </div>
             </div>
@@ -72,6 +66,44 @@
     <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+    <script>
+      function scrollToBottom() {
+        let objDiv = document.getElementById("chat-messages");
+        objDiv.scrollTop = objDiv.scrollHeight;
+      }
+      $('#chat-message-input').keypress(function(e) {
+        if (e.keyCode === 13) {
+          console.log('trigged')
+          var message = $('#chat-message-input').val()
+          if (message == '') {
+            alert('A mensagem não pode ser vazia!')
+          } else {
+            const room_name = JSON.parse(document.getElementById('json-roomname').textContent);
+            const username = JSON.parse(document.getElementById('json-username').textContent);
+            $.ajax({
+              type:'POST',
+              url:'send/',
+              data:{
+                username: username,
+                room_name: room_name,
+                message: message,
+              },
+              headers: { "X-CSRFToken": "{{ csrf_token }}" },
+              success: function(data){
+                var chat_messages = $('#chat-messages')
+
+                chat_messages.append(
+                  `<div class="my_message"><p >${data.message}</p></div>
+                `)
+                scrollToBottom()
+              }
+            });
+            $('#chat-message-input').val('')
+            }
+          }
+      })
+    </script>
 
     <script>
       var is_shown = false
