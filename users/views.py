@@ -114,8 +114,8 @@ def register(request):
     """ username_lol_exists = User.objects.filter(username_lol__iexact=summoner_username_lol).exists() """
 
     # Password can't look like other fields
-    password_username = len(summoner_password1.split(summoner_username))
-    password_email = len(summoner_password1.split(summoner_email))
+    password_username = len(summoner_username.split(summoner_password1))
+    password_email = len(summoner_email.split(summoner_password1))
 
     username_exists = User.objects.filter(username__iexact=summoner_username).exists()
     email_exists = User.objects.filter(email=summoner_email).exists()
